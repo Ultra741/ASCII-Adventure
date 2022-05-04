@@ -29,7 +29,7 @@ public class GridManager {
         index -= y * 172;
 
         // Set character at index
-        List<String> chars = Arrays.asList(GRID.split(""));
+        List<String> chars = Arrays.asList(GRID.replaceAll("\n", "").split(""));
         chars.set(index, s);
         GRID = StringUtil.join(chars, "");
 
