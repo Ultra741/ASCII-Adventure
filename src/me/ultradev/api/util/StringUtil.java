@@ -17,7 +17,6 @@ public class StringUtil {
      */
     public static String getAOrAn(String s) {
         List<Character> vowels = Arrays.asList('a', 'e', 'i', 'o', 'u');
-        boolean match = false;
         for(Character check : vowels) {
             if(s.toLowerCase().charAt(0) == check) {
                 return "An";
@@ -77,7 +76,7 @@ public class StringUtil {
             String data = new String(sourceBytes, defaultCharset.name());
             PrintStream out = new PrintStream(System.out, true, UTF_8.name());
             out.println(data);
-        } catch (UnsupportedEncodingException e) {
+        } catch(UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 

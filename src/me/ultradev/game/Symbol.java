@@ -9,5 +9,5 @@ public class Symbol {
     public static final String BORDER_BOTTOM_LEFT = "\u2514";
     public static final String BORDER_BOTTOM_RIGHT = "\u2518";
     public static final String PLAYER = "\u263B";
-    
+
 }

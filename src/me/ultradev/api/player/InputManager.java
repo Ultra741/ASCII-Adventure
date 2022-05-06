@@ -1,4 +1,4 @@
-package me.ultradev.api.grid;
+package me.ultradev.api.player;
 
 import me.ultradev.api.util.StringUtil;
 
