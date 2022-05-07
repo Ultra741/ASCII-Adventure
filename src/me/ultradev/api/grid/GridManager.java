@@ -1,5 +1,6 @@
 package me.ultradev.api.grid;
 
+import me.ultradev.api.player.PlayerManager;
 import me.ultradev.api.util.StringUtil;
 import me.ultradev.game.Symbol;
 
@@ -12,10 +13,18 @@ public class GridManager {
     public static final int GRID_HEIGHT = 20;
     public static final int GRID_WIDTH = 170;
 
-    public static void setupGrid() {
+    public static void resetGrid() {
         GRID = Symbol.BORDER_TOP_LEFT + StringUtil.repeat(Symbol.BORDER_HORIZONTAL, GRID_WIDTH) + Symbol.BORDER_TOP_RIGHT
                 + StringUtil.repeat("\n" + Symbol.BORDER_VERTICAL + StringUtil.repeat(" ", GRID_WIDTH) + Symbol.BORDER_VERTICAL, GRID_HEIGHT)
                 + "\n" + Symbol.BORDER_BOTTOM_LEFT + StringUtil.repeat(Symbol.BORDER_HORIZONTAL, GRID_WIDTH) + Symbol.BORDER_BOTTOM_RIGHT;
+    }
+
+    /**
+     * Updates the following things in the grid:
+     * - Player
+     */
+    public static void updateGrid() {
+        setCharacterAt(PlayerManager.x, PlayerManager.y, Symbol.PLAYER);
     }
 
     /**
@@ -47,6 +56,9 @@ public class GridManager {
 
     }
 
+    /**
+     * Prints the current grid.
+     */
     public static void printGrid() {
         for(int i = 0; i < 10; i++) System.out.println("");
         StringUtil.print(GRID);

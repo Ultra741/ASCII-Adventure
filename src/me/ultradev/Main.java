@@ -3,14 +3,13 @@ package me.ultradev;
 import me.ultradev.api.grid.GridManager;
 import me.ultradev.api.player.InputManager;
 import me.ultradev.api.player.PlayerManager;
-import me.ultradev.game.Symbol;
 
 public class Main {
 
     public static void main(String[] args) {
         while(true) {
-            GridManager.setupGrid();
-            GridManager.setCharacterAt(PlayerManager.x, PlayerManager.y, Symbol.PLAYER);
+            GridManager.resetGrid();
+            GridManager.updateGrid();
             GridManager.printGrid();
             String wasd = InputManager.getInput("Use WASD to move around");
             if(wasd.equalsIgnoreCase("w")) {
