@@ -1,5 +1,6 @@
 package me.ultradev;
 
+import me.ultradev.api.data.DataManager;
 import me.ultradev.api.grid.GridManager;
 import me.ultradev.api.player.InputManager;
 import me.ultradev.api.player.PlayerManager;
@@ -8,6 +9,9 @@ public class Main {
 
     public static void main(String[] args) {
         while(true) {
+
+            DataManager.createDataFile();
+
             GridManager.resetGrid();
             GridManager.updateGrid();
             GridManager.printGrid();
@@ -21,6 +25,7 @@ public class Main {
             } else if(wasd.equalsIgnoreCase("d")) {
                 PlayerManager.x += 1;
             }
+
         }
     }
 
