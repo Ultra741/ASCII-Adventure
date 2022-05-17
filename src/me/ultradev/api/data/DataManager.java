@@ -1,5 +1,7 @@
 package me.ultradev.api.data;
 
+import me.ultradev.api.util.StringUtil;
+
 import java.io.*;
 
 public class DataManager {
@@ -36,7 +38,7 @@ public class DataManager {
 
             if(currentValue == null) buffer.append(key).append(": ").append(value).append("\n");
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(buffer.toString());
+            writer.write(StringUtil.replaceLast(buffer.toString(), "\n", ""));
             writer.close();
 
         } catch(IOException e) {
@@ -72,20 +74,19 @@ public class DataManager {
         return null;
     }
 
-    public static Integer getInteger(String key) {
+    public static int getInteger(String key) {
         String value = getString(key);
-        if(value == null) return null;
+        if(value == null) return -1;
         try {
             return Integer.parseInt(key);
-        } catch(NumberFormatException nfe) { return null; }
+        } catch(NumberFormatException nfe) { return -1; }
     }
 
-    public static Boolean getBoolean(String key) {
+    public static boolean getBoolean(String key) {
         String value = getString(key);
-        if(value == null) return null;
+        if(value == null) return false;
         if(value.equals("true")) return true;
-        if(value.equals("false")) return false;
-        return null;
+        return false;
     }
 
 }

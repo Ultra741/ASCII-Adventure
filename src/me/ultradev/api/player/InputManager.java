@@ -14,7 +14,7 @@ public class InputManager {
     public static String getInput(String message) {
         StringUtil.print(message);
         Scanner scanner = new Scanner(System.in);
-        return scanner.next();
+        return scanner.nextLine();
     }
 
 }

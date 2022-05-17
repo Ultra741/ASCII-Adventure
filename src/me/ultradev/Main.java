@@ -8,9 +8,22 @@ import me.ultradev.api.player.PlayerManager;
 public class Main {
 
     public static void main(String[] args) {
-        while(true) {
 
-            DataManager.createDataFile();
+        DataManager.createDataFile();
+        if(!DataManager.getBoolean("has_played_before")) {
+            InputManager.getInput("""
+                       _    __    ___  _____ _____     _       _                 _                 \s
+                      /_\\  / _\\  / __\\ \\_   \\\\_   \\   /_\\   __| |_   _____ _ __ | |_ _   _ _ __ ___\s
+                     //_\\\\ \\ \\  / /     / /\\/ / /\\/  //_\\\\ / _` \\ \\ / / _ \\ '_ \\| __| | | | '__/ _ \\
+                    /  _  \\_\\ \\/ /___/\\/ /_/\\/ /_   /  _  \\ (_| |\\ V /  __/ | | | |_| |_| | | |  __/
+                    \\_/ \\_/\\__/\\____/\\____/\\____/   \\_/ \\_/\\__,_| \\_/ \\___|_| |_|\\__|\\__,_|_|  \\___|
+                                                                                                   \s
+                    Welcome to ASCII Adventure, a text-based dungeon crawler.
+                    Press ENTER to start.""");
+            DataManager.setBoolean("has_played_before", true);
+        }
+
+        while(true) {
 
             GridManager.resetGrid();
             GridManager.updateGrid();
@@ -27,6 +40,7 @@ public class Main {
             }
 
         }
+
     }
 
 }
