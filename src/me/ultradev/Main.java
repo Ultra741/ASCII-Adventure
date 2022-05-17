@@ -2,8 +2,11 @@ package me.ultradev;
 
 import me.ultradev.api.data.DataManager;
 import me.ultradev.api.grid.GridManager;
+import me.ultradev.api.grid.RoomGenerator;
+import me.ultradev.api.grid.WallType;
 import me.ultradev.api.player.InputManager;
 import me.ultradev.api.player.PlayerManager;
+import me.ultradev.api.util.NumberUtil;
 
 public class Main {
 
@@ -27,6 +30,12 @@ public class Main {
 
             GridManager.resetGrid();
             GridManager.updateGrid();
+            RoomGenerator.generateWall(WallType.HORIZONTAL,
+                    NumberUtil.getRandomBetween(0, GridManager.GRID_HEIGHT - 1),
+                    NumberUtil.getRandomBetween(10, 30));
+            RoomGenerator.generateWall(WallType.VERTICAL,
+                    NumberUtil.getRandomBetween(0, GridManager.GRID_WIDTH - 1),
+                    NumberUtil.getRandomBetween(10, 30));
             GridManager.printGrid();
             String wasd = InputManager.getInput("Use WASD to move around");
             if(wasd.equalsIgnoreCase("w")) {
