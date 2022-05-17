@@ -18,11 +18,11 @@ public class DataManager {
         return false;
     }
 
-    public static void setValue(String key, String value) {
+    public static void setString(String key, String value) {
         File file = new File("data.txt");
         try {
 
-            String currentValue = getValue(key);
+            String currentValue = getString(key);
             BufferedReader reader = new BufferedReader(new FileReader(file));
             StringBuilder buffer = new StringBuilder();
             String line = "";
@@ -44,7 +44,15 @@ public class DataManager {
         }
     }
 
-    public static String getValue(String key) {
+    public static void setInteger(String key, int value) {
+        setString(key, String.valueOf(value));
+    }
+
+    public static void setBoolean(String key, boolean value) {
+        setString(key, value ? "true" : "false");
+    }
+
+    public static String getString(String key) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
             String line = "";
@@ -61,6 +69,22 @@ public class DataManager {
         } catch(IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    public static Integer getInteger(String key) {
+        String value = getString(key);
+        if(value == null) return null;
+        try {
+            return Integer.parseInt(key);
+        } catch(NumberFormatException nfe) { return null; }
+    }
+
+    public static Boolean getBoolean(String key) {
+        String value = getString(key);
+        if(value == null) return null;
+        if(value.equals("true")) return true;
+        if(value.equals("false")) return false;
         return null;
     }
 
