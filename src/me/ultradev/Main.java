@@ -17,7 +17,7 @@ public class Main {
                      //_\\\\ \\ \\  / /     / /\\/ / /\\/  //_\\\\ / _` \\ \\ / / _ \\ '_ \\| __| | | | '__/ _ \\
                     /  _  \\_\\ \\/ /___/\\/ /_/\\/ /_   /  _  \\ (_| |\\ V /  __/ | | | |_| |_| | | |  __/
                     \\_/ \\_/\\__/\\____/\\____/\\____/   \\_/ \\_/\\__,_| \\_/ \\___|_| |_|\\__|\\__,_|_|  \\___|
-                                                                                                   \s
+                                                                                                   
                     Welcome to ASCII Adventure, a text-based dungeon crawler.
                     Press ENTER to start.""");
             DataManager.setBoolean("has_played_before", true);
