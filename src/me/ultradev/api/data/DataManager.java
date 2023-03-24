@@ -8,6 +8,7 @@ public class DataManager {
 
     /**
      * Creates the data file if it doesn't already exist.
+     *
      * @return whether the file was successfully created
      */
     public static boolean createDataFile() {
@@ -29,19 +30,19 @@ public class DataManager {
             StringBuilder buffer = new StringBuilder();
             String line = "";
 
-            while(line != null) {
+            while (line != null) {
                 line = reader.readLine();
-                if(line != null) {
+                if (line != null) {
                     buffer.append(line.replaceAll(key + ": " + currentValue, key + ": " + value)).append("\n");
                 }
             }
 
-            if(currentValue == null) buffer.append(key).append(": ").append(value).append("\n");
+            if (currentValue == null) buffer.append(key).append(": ").append(value).append("\n");
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(StringUtil.replaceLast(buffer.toString(), "\n", ""));
             writer.close();
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -58,17 +59,17 @@ public class DataManager {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
             String line = "";
-            while(line != null) {
+            while (line != null) {
                 line = reader.readLine();
-                if(line != null) {
-                    if(line.startsWith(key + ": ")) {
+                if (line != null) {
+                    if (line.startsWith(key + ": ")) {
                         reader.close();
                         return line.replaceFirst(key + ": ", "");
                     }
                 }
             }
             return null;
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -76,17 +77,18 @@ public class DataManager {
 
     public static int getInteger(String key) {
         String value = getString(key);
-        if(value == null) return -1;
+        if (value == null) return -1;
         try {
             return Integer.parseInt(key);
-        } catch(NumberFormatException nfe) { return -1; }
+        } catch (NumberFormatException nfe) {
+            return -1;
+        }
     }
 
     public static boolean getBoolean(String key) {
         String value = getString(key);
-        if(value == null) return false;
-        if(value.equals("true")) return true;
-        return false;
+        if (value == null) return false;
+        return value.equals("true");
     }
 
 }

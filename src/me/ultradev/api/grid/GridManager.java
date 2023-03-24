@@ -1,11 +1,15 @@
 package me.ultradev.api.grid;
 
-import me.ultradev.api.player.PlayerManager;
+import me.ultradev.api.grid.room.wall.Wall;
+import me.ultradev.api.grid.room.wall.WallType;
 import me.ultradev.api.util.StringUtil;
 import me.ultradev.game.Symbol;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static me.ultradev.api.grid.RoomManager.WALLS;
+import static me.ultradev.api.player.PlayerManager.PLAYER_COORDINATE;
 
 public class GridManager {
 
@@ -22,30 +26,38 @@ public class GridManager {
     /**
      * Updates the following things in the grid:
      * - Player
+     * - Walls
      */
     public static void updateGrid() {
-        setCharacterAt(PlayerManager.x, PlayerManager.y, Symbol.PLAYER);
+
+        // Player
+        setCharacterAt(PLAYER_COORDINATE.clone().add(0, 1), Symbol.PLAYER_TOP);
+        setCharacterAt(PLAYER_COORDINATE, Symbol.PLAYER_BOTTOM);
+
+        // Walls
+        for (Wall wall : WALLS) {
+            if (wall.type().equals(WallType.HORIZONTAL)) {
+                for (int i = 0; i < wall.length(); i++)
+                    setCharacterAt(wall.coordinate().clone().add(i, 0), Symbol.HORIZONTAL_WALL);
+            } else if (wall.type().equals(WallType.VERTICAL)) {
+                for (int i = 0; i < wall.length(); i++)
+                    setCharacterAt(wall.coordinate().clone().add(0, i), Symbol.VERTICAL_WALL);
+            }
+        }
+
     }
 
     /**
      * Sets the character at the specified location in the grid.
-     * @param x the x coordinate of the location
-     * @param y the y coordinate of the location
-     * @param s the character to change to
+     *
+     * @param coordinate the coordinate of the location
+     * @param s          the character to change to
      * @return whether the character was successfully set
      */
-    public static boolean setCharacterAt(int x, int y, String s) {
+    public static boolean setCharacterAt(Coordinate coordinate, String s) {
 
-        if(x < 0 || x > GRID_WIDTH - 1 || y < 0 || y > GRID_HEIGHT - 1) return false;
-
-        // Get the index of x:0 y:0
-        int index = GRID.length() - (GRID_WIDTH * 2 + 4);
-
-        // Add the x
-        index += x;
-
-        // Add the y
-        index -= y * (GRID_WIDTH + 3);
+        int index = coordinate.getGridIndex();
+        if (index == -1) return false;
 
         // Set character at index
         List<String> chars = Arrays.asList(GRID.split(""));
@@ -60,7 +72,7 @@ public class GridManager {
      * Prints the current grid.
      */
     public static void printGrid() {
-        for(int i = 0; i < 10; i++) System.out.println("");
+        for (int i = 0; i < 10; i++) System.out.println();
         StringUtil.print(GRID);
     }
 
