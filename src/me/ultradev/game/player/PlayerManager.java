@@ -1,6 +1,6 @@
-package me.ultradev.api.player;
+package me.ultradev.game.player;
 
-import me.ultradev.api.grid.Coordinate;
+import me.ultradev.game.grid.Coordinate;
 
 public class PlayerManager {
 
