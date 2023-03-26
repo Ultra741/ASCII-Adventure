@@ -1,4 +1,0 @@
-# This file is used to store your game data.
-# Please don't manually edit this file!
-
-username: Ultra

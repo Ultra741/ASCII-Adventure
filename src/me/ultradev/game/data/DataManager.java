@@ -1,5 +1,5 @@
 
-package me.ultradev.api.data;
+package me.ultradev.game.data;
 
 import me.ultradev.api.util.StringUtil;
 
@@ -39,7 +39,7 @@ public class DataManager {
         String value = getString(key);
         if (value == null) return -1;
         else try {
-            return Integer.parseInt(key);
+            return Integer.parseInt(value);
         } catch (NumberFormatException nfe) {
             return -1;
         }
@@ -63,12 +63,20 @@ public class DataManager {
                 while (line != null) {
                     line = reader.readLine();
                     if (line != null) {
-                        if (!line.startsWith("#")) {
+                        if (!line.startsWith("#") && !line.isEmpty()) {
                             buffer.append(line.replaceAll(key + ": " + currentValue, key + ": " + value)).append("\n");
                         }
                     }
                 }
             } else {
+                while (line != null) {
+                    line = reader.readLine();
+                    if (line != null) {
+                        if (!line.startsWith("#") && !line.isEmpty()) {
+                            buffer.append(line).append("\n");
+                        }
+                    }
+                }
                 buffer.append(key).append(": ").append(value).append("\n");
             }
 

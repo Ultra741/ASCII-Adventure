@@ -1,12 +1,20 @@
 package me.ultradev;
 
-import me.ultradev.api.data.DataManager;
-import me.ultradev.api.dialogue.Dialogue;
-import me.ultradev.api.dialogue.DialogueOption;
-import me.ultradev.game.grid.GridManager;
-import me.ultradev.game.player.ConsoleManager;
+import me.ultradev.game.data.DataManager;
+import me.ultradev.api.util.NumberUtil;
+import me.ultradev.game.TutorialManager;
+import me.ultradev.game.data.Data;
+import me.ultradev.game.KeyListener;
 
-import static me.ultradev.game.player.PlayerManager.PLAYER_COORDINATE;
+import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.util.concurrent.CountDownLatch;
 
 public class Main {
 
@@ -14,8 +22,50 @@ public class Main {
         DataManager.createDataFile();
         String username = DataManager.getString("username");
 
+        Data.FRAME = new JFrame();
+        Data.FRAME.setTitle("ASCIIAdventure");
+        URL icon = Main.class.getResource("icon.png");
+        if (icon == null) {
+            System.out.println("Couldn't find icon.png!");
+            return;
+        }
+        Data.FRAME.setIconImage(new ImageIcon(icon).getImage());
+        Data.FRAME.setSize(1000, 500);
+        Data.FRAME.setResizable(false);
+        Data.FRAME.setLocationRelativeTo(null);
+        Data.FRAME.addKeyListener(new KeyListener());
+        Data.FRAME.setVisible(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        Data.TEXT_PANE = new JTextPane();
+        Data.TEXT_PANE.setFocusable(false);
+        Data.TEXT_PANE.setFont(Data.FONT);
+
+        StyledDocument doc = Data.TEXT_PANE.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+        Data.INPUT_PANE = new JTextPane();
+        Data.INPUT_PANE.setFont(Data.FONT);
+        Data.INPUT_PANE.setVisible(false);
+
+        doc = Data.INPUT_PANE.getStyledDocument();
+        center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+        Data.INPUT_PANE.setPreferredSize(new Dimension(400, 300));
+
+        panel.add(Data.TEXT_PANE);
+        panel.add(Data.INPUT_PANE);
+        Data.FRAME.add(panel);
+
+        CountDownLatch latch = new CountDownLatch(1);
         if (username == null) {
-            ConsoleManager.waitForEnter("""
+            Data.TEXT_PANE.setText("""
                        _    __    ___  _____ _____     _       _                 _                 \s
                       /_\\  / _\\  / __\\ \\_   \\\\_   \\   /_\\   __| |_   _____ _ __ | |_ _   _ _ __ ___\s
                      //_\\\\ \\ \\  / /     / /\\/ / /\\/  //_\\\\ / _` \\ \\ / / _ \\ '_ \\| __| | | | '__/ _ \\
@@ -24,60 +74,34 @@ public class Main {
                                                                                                    
                     Welcome to ASCII Adventure, a text-based dungeon crawler.
                     Press ENTER to start your adventure.""");
-            ConsoleManager.clear();
-            while (true) {
-                System.out.println("Welcome to ASCII Adventure!\nEnter your username:" + "\n".repeat(10));
-                username = ConsoleManager.getInput("");
-                if (username.isBlank()) {
-                    ConsoleManager.clear();
-                    System.out.println("Please enter a valid name!\n");
-                } else if (username.length() < 3) {
-                    ConsoleManager.clear();
-                    System.out.println("Please enter a name that is at least 3 characters long!\n");
-                } else break;
-            }
-            ConsoleManager.clear();
-            DataManager.set("username", username);
-        }
+            KeyListener.waitForKey(KeyEvent.VK_ENTER);
 
-        int tutorial = DataManager.getInteger("tutorial");
-        if (tutorial == -1) {
-            GridManager.resetGrid();
-            GridManager.updateGrid();
-            new Dialogue("Guy")
-                    .pin(GridManager.GRID)
-                    .option("do you like cheese?",
-                            new DialogueOption.Option("Yes!", new Dialogue()
-                                    .line("awesome")
-                                    .line("you are very cool")),
-                            new DialogueOption.Option("No :(", new Dialogue("Angry Guy")
-                                    .line("what????")
-                                    .option("are you sure????",
-                                            new DialogueOption.Option("Yes?", new Dialogue("Very Angry Guy")
-                                                    .line("WTF IS WRONG WITH YOU")),
-                                            new DialogueOption.Option("No", new Dialogue("Guy")
-                                                    .line("thank god")
-                                                    .line("i love you")))))
-                    .send();
-            return;
-        }
+            Data.TEXT_PANE.setText("Welcome to ASCII Adventure!\nEnter your username:\n(Username must be at least 3 characters long)");
+            String[] names = new String[]{"John", "Peter", "Oliver", "William", "Lucas", "James", "Jack", "Jacob", "Samuel", "Luke", "Thomas"};
+            Data.INPUT_PANE.setText(names[NumberUtil.getRandomBetween(0, names.length - 1)]);
+            Data.INPUT_PANE.setVisible(true);
 
-        while (true) {
-            GridManager.resetGrid();
-            GridManager.updateGrid();
-            GridManager.printGrid();
-
-            String wasd = ConsoleManager.getInput("Use WASD to move around");
-            if (wasd.equalsIgnoreCase("w")) {
-                PLAYER_COORDINATE.add(0, 1);
-            } else if (wasd.equalsIgnoreCase("a")) {
-                PLAYER_COORDINATE.add(-1, 0);
-            } else if (wasd.equalsIgnoreCase("s")) {
-                PLAYER_COORDINATE.add(0, -1);
-            } else if (wasd.equalsIgnoreCase("d")) {
-                PLAYER_COORDINATE.add(1, 0);
+            Data.INPUT_PANE.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "ENTER");
+            Data.INPUT_PANE.getActionMap().put("ENTER", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String username = Data.INPUT_PANE.getText();
+                    if (username.length() >= 3) {
+                        Data.USERNAME = username;
+                        DataManager.set("username", username);
+                        Data.FRAME.requestFocus();
+                        Data.INPUT_PANE.setVisible(false);
+                        latch.countDown();
+                    }
+                }
+            });
+            try {
+                latch.await();
+            } catch (InterruptedException ignored) {
             }
         }
+
+        TutorialManager.startTutorial(DataManager.getInteger("tutorial"));
 
     }
 

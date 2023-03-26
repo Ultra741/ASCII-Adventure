@@ -1,7 +1,9 @@
 package me.ultradev.api.dialogue;
 
-import me.ultradev.game.player.ConsoleManager;
+import me.ultradev.game.KeyListener;
+import me.ultradev.game.data.Data;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +43,10 @@ public class Dialogue {
     public void send() {
         String prefix = "[" + this.prefix + "] ";
         for (DialogueLine line : lines) {
-            ConsoleManager.clear();
-            System.out.println(pinnedMessage);
+            StringBuilder builder = new StringBuilder();
+            if (pinnedMessage != null) builder.append(pinnedMessage).append("\n");
             if (line instanceof DialogueOption option) {
+                /*
                 String input;
                 while (true) {
                     System.out.println(prefix + option.getLine());
@@ -60,9 +63,14 @@ public class Dialogue {
                     subDialogue.prefix(this.prefix);
                 }
                 subDialogue.pin(pinnedMessage).send();
+                 */
             } else {
-                System.out.println(prefix + line.getLine());
-                ConsoleManager.waitForEnter("(Press ENTER to continue)");
+                Data.TEXT_PANE.setText(builder
+                        .append(prefix)
+                        .append(line.getLine())
+                        .append("\n(Press ENTER to continue)")
+                        .toString());
+                KeyListener.waitForKey(KeyEvent.VK_ENTER);
             }
         }
     }

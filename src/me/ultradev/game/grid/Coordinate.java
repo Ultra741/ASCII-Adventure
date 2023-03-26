@@ -1,8 +1,7 @@
 package me.ultradev.game.grid;
 
 import me.ultradev.api.util.NumberUtil;
-
-import static me.ultradev.game.grid.GridManager.*;
+import me.ultradev.game.data.Data;
 
 public class Coordinate implements Cloneable {
 
@@ -29,20 +28,26 @@ public class Coordinate implements Cloneable {
         this.y = y;
     }
 
+    public void set(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void set(Coordinate coordinate) {
+        this.x = coordinate.getX();
+        this.y = coordinate.getY();
+    }
+
     public boolean isValid() {
-        return x >= 0 && x <= GRID_WIDTH - 1 && y >= 0 && y <= GRID_HEIGHT - 1;
+        return x >= 0 && x <= Data.GRID_WIDTH - 1 && y >= 0 && y <= Data.GRID_HEIGHT - 1;
     }
 
     public int getGridIndex() {
         if (!isValid()) return -1;
 
-        // Get the index of x:0 y:0
-        int index = GRID.length() - (GRID_WIDTH * 2 + 4);
-        // Add the x
+        int index = Data.GRID.length() - (Data.GRID_WIDTH * 2 + 4);
         index += x;
-        // Add the y
-        index -= y * (GRID_WIDTH + 3);
-
+        index -= y * (Data.GRID_WIDTH + 3);
         return index;
     }
 
@@ -52,6 +57,18 @@ public class Coordinate implements Cloneable {
         return this;
     }
 
+    public boolean equals(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+
+    public double distance(int x, int y) {
+        return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
+    }
+
+    public double distance(Coordinate coordinate) {
+        return distance(coordinate.getX(), coordinate.getY());
+    }
+
     @Override
     public Coordinate clone() {
         return new Coordinate(x, y);
@@ -59,8 +76,8 @@ public class Coordinate implements Cloneable {
 
     public static Coordinate getRandom() {
         return new Coordinate(
-                NumberUtil.getRandomBetween(0, GRID_WIDTH - 1),
-                NumberUtil.getRandomBetween(0, GRID_HEIGHT - 1)
+                NumberUtil.getRandomBetween(0, Data.GRID_WIDTH - 1),
+                NumberUtil.getRandomBetween(0, Data.GRID_HEIGHT - 1)
         );
     }
 
